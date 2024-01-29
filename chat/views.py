@@ -28,7 +28,14 @@ def manageMessages(request):
                         'Invalid form: missing fields or invalid data type for fields (content, author) sended: ' + str(form.cleaned_data))
                 message = Message(content=content, author=author)
                 message.save()
-                return JsonResponse({'message': 'Message created successfully'})
+                messages = Message.objects.all()
+                messages = messages.order_by('-date')
+                messages = list(messages.values())
+                for message in messages:
+                    message['author'] = User.objects.get(
+                        id=message['author_id'])
+                form = MessageForm()
+                return render(request, 'messages.html', {'form': form, 'chat': messages})
             else:
                 errStatus = 400
                 raise Exception('Invalid form')
@@ -37,8 +44,13 @@ def manageMessages(request):
             type = request.GET.get('type')
             if type == 'all' or type == None:
                 messages = Message.objects.all()
+                messages = messages.order_by('-date')
+                messages = list(messages.values())
+                for message in messages:
+                    message['author'] = User.objects.get(
+                        id=message['author_id'])
                 form = MessageForm()
-                return render(request, 'messages/messages.html', {'form': form, 'messages': list(messages.values())})
+                return render(request, 'messages.html', {'form': form, 'chat': messages})
             # elif type == 'one':
                 # id = request.GET.get('id')
                 # if not id:

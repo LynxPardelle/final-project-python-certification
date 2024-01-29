@@ -1,4 +1,8 @@
-{% extends 'layout/index.html' %} {% block content %}
+{% extends 'layout/index.html' %} {% block content %} {% if chat %} 
+<h2 class="text-center">Chat</h2>
+{% for message in chat %}
+<p>{{ message.author }} - {{ message.date }}: {{ message.content }}</p>
+{% endfor %} {% endif %}
 <form action="" method="POST">
   {% csrf_token %} {{ form.as_p }}
   <button type="submit">Mandar mensaje</button>
