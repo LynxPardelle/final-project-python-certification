@@ -1,0 +1,12 @@
+{% extends 'layout/index.html' %} {% block content %}
+<form action="" method="POST">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Registrate!</button>
+</form>
+{% if error %}
+<p>{{ error }}</p>
+{% endif %} {% if success %}
+<p>{{ success }}</p>
+{% endif %} {% if messages %} {% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %} {% endif %} {% endblock %}

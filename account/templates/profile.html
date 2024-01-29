@@ -1,0 +1,24 @@
+{% extends 'layout/index.html' %} {% block content %} {%if profile%}
+<h2 class="text-center">{{profile.username}}</h2>
+<h3 class="text-center">{{profile.email}}</h3>
+{% if profile.avatar %}
+<img
+  src="/media/{{profile.avatar}}"
+  alt="{{profile.username}}"
+  class="img-fluid rounded-circle mx-auto d-block my-3"
+/>
+{%endif%}
+<p class="text-center">{{profile.description}}</p>
+<a class="text-center mx-auto d-block my-3" href="{{profile.web_page}}" target="_blank">{{profile.web_page}}</a>
+{% if user.is_authenticated %} {% if user.id == profile.id %}
+<div
+  class="d-flex mx-auto justify-content-evenly align-items-center text-center mt-3 mb-5"
+>
+  <a href="/accounts/update_profile/{{ profile.id }}" class="btn btn-primary"
+    >Edit</a
+  >
+  {% comment %} <a class="btn btn-danger">Delete</a> {% endcomment %}
+</div>
+{% endif %} {% endif %} {%else%}
+<h2>User doesn't exits</h2>
+{%endif%} {% endblock %}

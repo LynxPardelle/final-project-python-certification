@@ -1,0 +1,30 @@
+{% extends 'layout/index.html' %} {% block content %} {% if blog %}
+<h2 class="text-center">{{ blog.title }}</h2>
+<p class="text-center">
+  Posted by {{ blog.author.username }} on {{ blog.date }}
+</p>
+{% if blog.image %}
+<img
+  src="{{ blog.image.url }}"
+  alt="{{ blog.title }}"
+  class="img-fluid mx-auto d-block"
+/>
+{% endif %}
+<p class="text-center">{{ blog.content }}</p>
+{% if user.is_authenticated %} {% if user == blog.author %}
+<div
+  class="d-flex mx-auto justify-content-evenly align-items-center text-center"
+>
+  <a href="/blog/update/{{ blog.id }}" class="btn btn-primary">Edit</a>
+  <a class="btn btn-danger">Delete</a>
+</div>
+{% endif %} {% endif %} {% else %}
+<h2 class="text-center">No Blog Found</h2>
+<a href="/blog/create" class="btn btn-success">Add Blog</a>
+{% endif %}
+<div id="messages">
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-success">{{ message }}</div>
+  {% endfor %} {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'layout/index.html' %} {% block content %}
+<br />
+{% if user.is_authenticated %}
+<h2 class="text-center">Welcome {{ user.username }}</h2>
+{% else %}
+<h2 class="text-center">Welcome</h2>
+{% endif %} {% if blogs %} {% for blog in blogs %}
+<div class="card">
+  <div class="card-header">
+    <h3>{{ blog.title }}</h3>
+  </div>
+  <div class="card-body">
+    {% if blog.image %}
+    <img
+      src="/media/{{ blog.image }}"
+      alt="{{ blog.title }}"
+      class="img-fluid bef bef bef-objectFit-cover bef-objectPosition-center"
+      style="width: 100%; height: 300px"
+    />
+    {% endif %}
+    <p>{{ blog.content }}</p>
+    <p class="text-right">Posted by {{ blog.author }} on {{ blog.date }}</p>
+    {% if user.is_authenticated %} {% if user == blog.author %}
+    <div
+      class="d-flex mx-auto justify-content-evenly align-items-center text-center"
+    >
+      <a href="/blog/update/{{ blog.id }}" class="btn btn-primary">Edit</a>
+      <a class="btn btn-danger">Delete</a>
+      {% endif %} {% endif %}
+      <a href="/blog/one/{{ blog.id }}" class="btn btn-primary">Detail</a>
+    </div>
+  </div>
+</div>
+<br />
+{% endfor %} {% else %}
+<h3 class="text-center">No blogs found</h3>
+{% endif %}
+<div class="text-center">
+  <a href="/blog/create" class="btn btn-primary">Add Blog</a>
+</div>
+<div id="messages">
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-success">{{ message }}</div>
+  {% endfor %} {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'layout/index.html' %} {% block content %}{% if form %}
+<br />
+<form
+  action="/blog/{% if id %}update/{{id}}{% else %}{% endif %}"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">
+    {% if id %}Editar{% else %}Crear{% endif %} Blog
+  </button>
+</form>
+{% endif %} {% endblock %}
