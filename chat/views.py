@@ -29,7 +29,7 @@ def manageMessages(request):
                 message = Message(content=content, author=author)
                 message.save()
                 messages = Message.objects.all()
-                messages = messages.order_by('-date')
+                messages = messages.order_by('date')
                 messages = list(messages.values())
                 for message in messages:
                     message['author'] = User.objects.get(

@@ -1,10 +1,15 @@
-{% extends 'layout/index.html' %} {% block content %}
+{% extends 'layout/index.html' %} {% load static %} {% block content %}
 <br />
 {% if user.is_authenticated %}
 <h2 class="text-center">Welcome {{ user.username }}</h2>
 {% else %}
 <h2 class="text-center">Welcome</h2>
-{% endif %} {% if blogs %} {% for blog in blogs %}
+{% endif %} {% if blogs %}
+<div class="d-flex justify-content-between align-items-center">
+  <input type="text" id="search" class="form-control" placeholder="Search" />
+  <button class="btn btn-primary" onclick="searchBlog()">Search</button>
+</div>
+{% for blog in blogs %}
 <div class="card">
   <div class="card-header">
     <h3>{{ blog.title }}</h3>
@@ -25,9 +30,11 @@
       class="d-flex mx-auto justify-content-evenly align-items-center text-center"
     >
       <a href="/blog/update/{{ blog.id }}" class="btn btn-primary">Edit</a>
-      <a class="btn btn-danger">Delete</a>
+      <button class="btn btn-danger" onclick="deleteBlog({{blog.id}})">
+        Delete
+      </button>
       {% endif %} {% endif %}
-      <a href="/blog/one/{{ blog.id }}" class="btn btn-primary">Detail</a>
+      <a href="/blog/page/one/{{ blog.id }}" class="btn btn-primary">Detail</a>
     </div>
   </div>
 </div>
@@ -43,4 +50,5 @@
   <div class="alert alert-success">{{ message }}</div>
   {% endfor %} {% endif %}
 </div>
-{% endblock %}
+<script src="{% static 'js/blog.js' %}"></script>
+{% endblock %} {% block title %} Blogs {% endblock %}

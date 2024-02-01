@@ -36,7 +36,9 @@ def getBlogs(request, option=None, id=None, search=None):
                 if not id:
                     errStatus = 400
                     raise Exception('Missing id')
+                print(id)
                 blog = Blog.objects.get(id=id)
+                print(blog)
                 return render(request, 'blog.html', {'blog': blog})
             elif option == 'search':
                 blogs = Blog.objects.filter(title__icontains=search)
@@ -44,7 +46,7 @@ def getBlogs(request, option=None, id=None, search=None):
             else:
                 raise Exception('Invalid option')
         else:
-            return JsonResponse({'message': 'Invalid method'})
+            return JsonResponse({'message': 'Invalid method:' + request.method})
     except Exception as e:
         print('An exception occurred')
         return render(request, 'error.html', {
@@ -80,19 +82,22 @@ def manipulateBlog(request, option=None, id=None, search=None):
                 print('request.POST:', request.POST)
                 print('form.cleaned_data:', form.cleaned_data)
                 print('request.FILES:', request.FILES)
-                if form.cleaned_data['image']:
-                    image = form.cleaned_data['image']
+                if form.cleaned_data.get('image'):
+                    image = form.cleaned_data.get('image')
                     print('image:', image)
-                elif request.FILES['image']:
-                    image = request.FILES['image']
+                elif request.FILES.get('image'):
+                    image = request.FILES.get('image')
                     print('image:', image)
-                elif request.POST['image']:
-                    image = request.POST['image']
+                elif request.POST.get('image'):
+                    image = request.POST.get('image')
                     print('image:', image)
+                else:
+                    image = None
+                    print('No image')
                 author = request.user
                 if not author:
                     author = User.objects.get(id=1)
-                if not title or not sub_title or not content or not image or not author:
+                if not title or not sub_title or not content or not author:
                     errStatus = 400
                     raise Exception(
                         'Invalid form: missing fields or invalid data option for fields (title, sub_title, content, image, author) sended: ' + str(form.cleaned_data))
@@ -104,7 +109,7 @@ def manipulateBlog(request, option=None, id=None, search=None):
                     blog.title = title
                     blog.sub_title = sub_title
                     blog.content = content
-                    blog.image = image
+                    blog.image = image or blog.image
                     blog.author = author
                 blog.save()
                 print(blog)
@@ -181,8 +186,6 @@ def manipulateBlog(request, option=None, id=None, search=None):
             return render(request, 'blog.html', {'blog': blog, 'messages': ['Blog updated successfully']})
         # Delete
         elif request.method == 'DELETE':
-            data = json.loads(request.body)
-            id = data['id']
             if not id:
                 errStatus = 400
                 raise Exception('Missing id')
@@ -195,7 +198,7 @@ def manipulateBlog(request, option=None, id=None, search=None):
         elif request.method == 'OPTIONS':
             return JsonResponse({'message': 'Options'})
         else:
-            return JsonResponse({'message': 'Invalid method'})
+            return JsonResponse({'message': 'Invalid method' + request.method})
     except Exception as e:
         print('An exception occurred')
         return render(request, 'error.html', {
@@ -204,7 +207,6 @@ def manipulateBlog(request, option=None, id=None, search=None):
             'data': {
                 'method': request.method,
                 'path': request.path,
-                'body': request.body.decode('utf-8'),
                 'headers': dict(request.headers),
             },
             'message': "Error: %s" % e})

@@ -1,7 +1,8 @@
 {% extends 'layout/index.html' %} {% block content %}{% if form %}
 <br />
+{{id}}
 <form
-  action="/blog/{% if id %}update/{{id}}{% else %}{% endif %}"
+  action="/blog/{% if id %}update/{{id}}{% else %}create{% endif %}"
   method="POST"
   enctype="multipart/form-data"
 >

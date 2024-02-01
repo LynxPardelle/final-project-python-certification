@@ -1,6 +1,6 @@
 <header class="bef bef-h-56px mb-3">
   <nav
-    class="position-fixed top-0 start-0 w-100 navbar navbar-expand-lg bef bef-bg-moccasin bef-text-mystic px-2 bef-z-100"
+    class="position-fixed top-0 start-0 w-100 navbar navbar-expand-lg bef bef-bg-darkolivegreen bef-text-honeydew px-2 bef-z-100"
   >
     <a class="navbar-brand fw-bold" href="/"
       >Final Project Python Certification{% if name%}, {{ name }}{% endif %}</a
@@ -24,6 +24,9 @@
         {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="/blog/pages">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/accounts/logout">Logout</a>
